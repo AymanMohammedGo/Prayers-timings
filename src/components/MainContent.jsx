@@ -14,19 +14,39 @@ moment.locale("ar");
 export default function MainContent() {
   const avilableCities = [
     {
-      key: "c1",
       displayName: "مكة المكرمة",
       apiName: "Makkah al Mukarramah",
     },
     {
-      key: "c2",
       displayName: "الرياض",
       apiName: "Riyadh",
     },
     {
-      key: "c3",
       displayName: "الدمام",
       apiName: "Dommam",
+    },
+  ];
+
+  const prayersArray = [
+    {
+      key: "Fajr",
+      displayName: "الفجر",
+    },
+    {
+      key: "Dhuhr",
+      displayName: "الظهر",
+    },
+    {
+      key: "Asr",
+      displayName: "العصر",
+    },
+    {
+      key: "Sunset",
+      displayName: "المغرب",
+    },
+    {
+      key: "Isha",
+      displayName: "العشاء",
     },
   ];
   //status
@@ -43,6 +63,9 @@ export default function MainContent() {
     apiName: "Makkah al Mukarramah",
   });
   const [today, setToday] = useState("");
+  const [timer, setTimer] = useState(10);
+  const [nextPrayerIndex, setNextPrayerIndex] = useState(0);
+
   const getTimings = async () => {
     const response = await axios.get(
       `https://api.aladhan.com/v1/timingsByCity?country=SA&city=${selectedCity.apiName}`
@@ -52,12 +75,63 @@ export default function MainContent() {
   };
   useEffect(() => {
     getTimings();
-
-    const t = moment();
-    setToday(t.format("MMMM Do YYYY | h:mm:ss"));
-    console.log(moment().format("LT"));
   }, [selectedCity]);
 
+  useEffect(() => {
+    let interval = setInterval(() => {
+      // setTimer((t) => {
+      //   return t - 1;
+      // });
+      setupCountdownTimer();
+    }, 1000);
+
+    const t = moment();
+    setToday(t.format("MMM Do YYYY | hh:mm:ss "));
+
+    // return () => {
+    //   clearInterval(interval);
+    // };
+  }, []);
+
+  const setupCountdownTimer = () => {
+    const momentNow = moment();
+
+    let prayerIndex = 0;
+
+    if (
+      momentNow.isAfter(moment(timings["Fajr"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Dhuhr"], "hh:mm"))
+    ) {
+      prayerIndex = 1;
+    } else if (
+      momentNow.isAfter(moment(timings["Dhuhr"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Asr"], "hh:mm"))
+    ) {
+      prayerIndex = 2;
+    } else if (
+      momentNow.isAfter(moment(timings["Asr"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Sunset"], "hh:mm"))
+    ) {
+      // console.log(moment(timings["Sunset"], "hh:mm"));
+      prayerIndex = 3;
+    } else if (
+      momentNow.isAfter(moment(timings["Sunset"], "hh:mm")) &&
+      momentNow.isBefore(moment(timings["Isha"], "hh:mm"))
+    ) {
+      prayerIndex = 4;
+    } else {
+      prayerIndex = 0;
+    }
+    setNextPrayerIndex(prayerIndex);
+
+    const nextPrayerObject = prayersArray[prayerIndex];
+    const nextPrayerTime = timings[nextPrayerObject.key];
+    const remainingTime = momentNow.diff(moment(nextPrayerTime, "hh:mm"));
+    console.log(remainingTime);
+    //const isha = timings["Isha"];
+    //const ishaMoment = moment(isha, "hh:mm");
+    //console.log(momentNow.isBefore(ishaMoment));
+  };
   const handleCityChange = (event) => {
     const cityObject = avilableCities.find((city) => {
       return city.apiName == event.target.value;
@@ -72,11 +146,12 @@ export default function MainContent() {
           <div>
             <h2>{today}</h2>
             <h1>{selectedCity.displayName}</h1>
+            <h1>{timer}</h1>
           </div>
         </Grid>
         <Grid xs={6}>
           <div>
-            <h2>متبقي على صلاة العصر</h2>
+            <h2>متبقي على صلاة {prayersArray[nextPrayerIndex].displayName}</h2>
             <h1>00:10:20</h1>
           </div>
         </Grid>
@@ -137,7 +212,7 @@ export default function MainContent() {
           >
             {avilableCities.map((city) => {
               return (
-                <MenuItem key={city.key} value={city.apiName}>
+                <MenuItem key={city.apiName} value={city.apiName}>
                   {city.displayName}
                 </MenuItem>
               );
