@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
@@ -11,6 +11,7 @@ import axios from "axios";
 import moment from "moment/moment";
 import "moment/dist/locale/ar";
 moment.locale("ar");
+
 export default function MainContent() {
   const avilableCities = [
     {
@@ -51,51 +52,36 @@ export default function MainContent() {
   ];
   //status
   const [timings, setTimings] = useState({
-    Fajr: "03:57",
-    Dhuhr: "12:59",
-    Asr: "16:55",
-    Sunset: "20:12",
-    Isha: "22:02",
+    Fajr: "04:06",
+    Dhuhr: "11:27",
+    Asr: "14:54",
+    Sunset: "17:31",
+    Isha: "19:01",
   });
+
+  const [remainingTime, setRemainingTime] = useState("");
 
   const [selectedCity, setSelectedCity] = useState({
     displayName: "مكة المكرمة",
     apiName: "Makkah al Mukarramah",
   });
+
   const [today, setToday] = useState("");
-  const [timer, setTimer] = useState(10);
+
   const [nextPrayerIndex, setNextPrayerIndex] = useState(0);
 
   const getTimings = async () => {
     const response = await axios.get(
       `https://api.aladhan.com/v1/timingsByCity?country=SA&city=${selectedCity.apiName}`
     );
-
     setTimings(response.data.data.timings);
   };
+
   useEffect(() => {
     getTimings();
   }, [selectedCity]);
-
-  useEffect(() => {
-    let interval = setInterval(() => {
-      // setTimer((t) => {
-      //   return t - 1;
-      // });
-      setupCountdownTimer();
-    }, 1000);
-
-    const t = moment();
-    setToday(t.format("MMM Do YYYY | hh:mm:ss "));
-
-    // return () => {
-    //   clearInterval(interval);
-    // };
-  }, []);
-
   const setupCountdownTimer = () => {
     const momentNow = moment();
-
     let prayerIndex = 0;
 
     if (
@@ -126,12 +112,41 @@ export default function MainContent() {
 
     const nextPrayerObject = prayersArray[prayerIndex];
     const nextPrayerTime = timings[nextPrayerObject.key];
-    const remainingTime = momentNow.diff(moment(nextPrayerTime, "hh:mm"));
-    console.log(remainingTime);
-    //const isha = timings["Isha"];
-    //const ishaMoment = moment(isha, "hh:mm");
-    //console.log(momentNow.isBefore(ishaMoment));
+    const nextPrayerTimeMoment = moment(nextPrayerTime, "hh:mm");
+
+    let remainingTime = moment(nextPrayerTime, "hh:mm").diff(momentNow);
+
+    if (remainingTime < 0) {
+      const midnightDiff = moment("23:59:59", "hh:mm:ss").diff(momentNow);
+      const fajrToMidnightDiff = nextPrayerTimeMoment.diff(
+        moment("00:00:00", "hh:mm:ss")
+      );
+
+      const totalDiffernce = midnightDiff + fajrToMidnightDiff;
+      remainingTime = totalDiffernce;
+    }
+    const durationRemainingTime = moment.duration(remainingTime);
+    setRemainingTime(
+      ` ${durationRemainingTime.seconds()} : ${durationRemainingTime.minutes()} : ${durationRemainingTime.hours()}`
+    );
   };
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      // setTimer((t) => {
+      //   return t - 1;
+      // });
+      console.log(timings);
+      setupCountdownTimer();
+      const t = moment();
+      setToday(t.format("MMM Do YYYY | hh:mm:ss "));
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timings]);
+
   const handleCityChange = (event) => {
     const cityObject = avilableCities.find((city) => {
       return city.apiName == event.target.value;
@@ -141,25 +156,23 @@ export default function MainContent() {
   return (
     <>
       {/* top row */}
+
       <Grid container>
         <Grid xs={6}>
           <div>
             <h2>{today}</h2>
             <h1>{selectedCity.displayName}</h1>
-            <h1>{timer}</h1>
           </div>
         </Grid>
         <Grid xs={6}>
           <div>
             <h2>متبقي على صلاة {prayersArray[nextPrayerIndex].displayName}</h2>
-            <h1>00:10:20</h1>
+            <h1>{remainingTime}</h1>
           </div>
         </Grid>
       </Grid>
       {/* top row */}
-
       <Divider style={{ borderColor: "white", opacity: 0.1 }} />
-
       {/*prayers cards*/}
       <Stack
         direction="row"
