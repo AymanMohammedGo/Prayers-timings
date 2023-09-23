@@ -50,6 +50,9 @@ html {
 .MuiOutlinedInput-notchedOutline {
   border-color: white !important;
 }
+.MuiSelect-select {
+  color: white !important;
+}
 .MuiSvgIcon-root {
   color: white !important;
 }

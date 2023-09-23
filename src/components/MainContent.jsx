@@ -9,6 +9,13 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import moment from "moment/moment";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import "moment/dist/locale/ar";
 moment.locale("ar");
 
@@ -58,6 +65,7 @@ export default function MainContent() {
     Sunset: "17:31",
     Isha: "19:01",
   });
+  const [timingsForMonth, setTimingsForMonth] = useState([]);
 
   const [remainingTime, setRemainingTime] = useState("");
 
@@ -74,7 +82,14 @@ export default function MainContent() {
     const response = await axios.get(
       `https://api.aladhan.com/v1/timingsByCity?country=SA&city=${selectedCity.apiName}`
     );
+    const reponse1 = await axios.get(
+      `http://api.aladhan.com/v1/calendarByAddress/${moment().format(
+        "yyyy/MM"
+      )}?address=${selectedCity.apiName}`
+    );
+
     setTimings(response.data.data.timings);
+    setTimingsForMonth(reponse1.data.data);
   };
 
   useEffect(() => {
@@ -98,7 +113,6 @@ export default function MainContent() {
       momentNow.isAfter(moment(timings["Asr"], "hh:mm")) &&
       momentNow.isBefore(moment(timings["Sunset"], "hh:mm"))
     ) {
-      // console.log(moment(timings["Sunset"], "hh:mm"));
       prayerIndex = 3;
     } else if (
       momentNow.isAfter(moment(timings["Sunset"], "hh:mm")) &&
@@ -136,7 +150,7 @@ export default function MainContent() {
       // setTimer((t) => {
       //   return t - 1;
       // });
-      console.log(timings);
+
       setupCountdownTimer();
       const t = moment();
       setToday(t.format("MMM Do YYYY | hh:mm:ss "));
@@ -234,6 +248,39 @@ export default function MainContent() {
         </FormControl>
       </Stack>
       {/*select city*/}
+      {/*table */}
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">التاريخ</TableCell>
+              <TableCell align="center">الفجر</TableCell>
+              <TableCell align="center">الظهر</TableCell>
+              <TableCell align="center">العصر</TableCell>
+              <TableCell align="center">المغرب</TableCell>
+              <TableCell align="center">العشاء</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {timingsForMonth.map((data) => (
+              <TableRow
+                key={data.name}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="center" component="th" scope="row">
+                  {data.date.readable}
+                </TableCell>
+                <TableCell align="center">{data.timings.Fajr}</TableCell>
+                <TableCell align="center">{data.timings.Dhuhr}</TableCell>
+                <TableCell align="center">{data.timings.Asr}</TableCell>
+                <TableCell align="center">{data.timings.Sunset}</TableCell>
+                <TableCell align="center">{data.timings.Isha}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/*table */}
     </>
   );
 }
