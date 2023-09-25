@@ -58,6 +58,18 @@ export default function MainContent() {
     },
   ];
   //status
+  const [country, setCountry] = useState([
+    {
+      translations: {
+        ara: {
+          common: "aleppo",
+        },
+      },
+      name: {
+        common: "one",
+      },
+    },
+  ]);
   const [timings, setTimings] = useState({
     Fajr: "04:06",
     Dhuhr: "11:27",
@@ -87,9 +99,13 @@ export default function MainContent() {
         "yyyy/MM"
       )}?address=${selectedCity.apiName}`
     );
+    const reponse2 = await axios.get(
+      `https://restcountries.com/v3.1/lang/Arabic`
+    );
 
     setTimings(response.data.data.timings);
     setTimingsForMonth(reponse1.data.data);
+    setCountry(reponse2.data);
   };
 
   useEffect(() => {
@@ -220,12 +236,40 @@ export default function MainContent() {
         />
       </Stack>
       {/*prayers cards*/}
+
       {/*select city*/}
       <Stack
         direction="row"
-        justifyContent={"center"}
-        style={{ marginTop: "40px" }}
+        justifyContent={"space-evenly"}
+        style={{ margin: "40px" }}
       >
+        <FormControl style={{ width: "20%" }}>
+          <InputLabel id="demo-simple-select-label">
+            <span style={{ color: "white" }}>البلد</span>
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            //value={selectedCity.apiName}
+            label="Age"
+            //onChange={handleCityChange}
+          >
+            {country.map(
+              (countrys) =>
+                countrys.translations.ara.common !== "إسرائيل" && (
+                  <MenuItem
+                    key={countrys.name.common}
+                    value={countrys.name.common}
+                  >
+                    {countrys.translations.ara.common ===
+                    "دولة الإمارات العربية المتحدة"
+                      ? "الإمارات"
+                      : countrys.translations.ara.common}
+                  </MenuItem>
+                )
+            )}
+          </Select>
+        </FormControl>
         <FormControl style={{ width: "20%" }}>
           <InputLabel id="demo-simple-select-label">
             <span style={{ color: "white" }}>المدينة</span>
@@ -233,21 +277,20 @@ export default function MainContent() {
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            // value={age}
+            value={selectedCity.apiName}
             label="Age"
             onChange={handleCityChange}
           >
-            {avilableCities.map((city) => {
-              return (
-                <MenuItem key={city.apiName} value={city.apiName}>
-                  {city.displayName}
-                </MenuItem>
-              );
-            })}
+            {avilableCities.map((city) => (
+              <MenuItem key={city.apiName} value={city.apiName}>
+                {city.displayName}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Stack>
       {/*select city*/}
+
       {/*table */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
