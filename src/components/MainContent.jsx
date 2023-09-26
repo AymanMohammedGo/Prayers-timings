@@ -16,7 +16,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+
 import "moment/dist/locale/ar";
+import SelectLocation from "./SelectLocation";
 moment.locale("ar");
 
 export default function MainContent() {
@@ -58,18 +60,7 @@ export default function MainContent() {
     },
   ];
   //status
-  const [country, setCountry] = useState([
-    {
-      translations: {
-        ara: {
-          common: "aleppo",
-        },
-      },
-      name: {
-        common: "one",
-      },
-    },
-  ]);
+
   const [timings, setTimings] = useState({
     Fajr: "04:06",
     Dhuhr: "11:27",
@@ -99,18 +90,15 @@ export default function MainContent() {
         "yyyy/MM"
       )}?address=${selectedCity.apiName}`
     );
-    const reponse2 = await axios.get(
-      `https://restcountries.com/v3.1/lang/Arabic`
-    );
 
     setTimings(response.data.data.timings);
     setTimingsForMonth(reponse1.data.data);
-    setCountry(reponse2.data);
   };
 
   useEffect(() => {
     getTimings();
   }, [selectedCity]);
+
   const setupCountdownTimer = () => {
     const momentNow = moment();
     let prayerIndex = 0;
@@ -186,7 +174,7 @@ export default function MainContent() {
   return (
     <>
       {/* top row */}
-
+      <SelectLocation />
       <Grid container>
         <Grid xs={6}>
           <div>
@@ -245,33 +233,6 @@ export default function MainContent() {
       >
         <FormControl style={{ width: "20%" }}>
           <InputLabel id="demo-simple-select-label">
-            <span style={{ color: "white" }}>البلد</span>
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            //value={selectedCity.apiName}
-            label="Age"
-            //onChange={handleCityChange}
-          >
-            {country.map(
-              (countrys) =>
-                countrys.translations.ara.common !== "إسرائيل" && (
-                  <MenuItem
-                    key={countrys.name.common}
-                    value={countrys.name.common}
-                  >
-                    {countrys.translations.ara.common ===
-                    "دولة الإمارات العربية المتحدة"
-                      ? "الإمارات"
-                      : countrys.translations.ara.common}
-                  </MenuItem>
-                )
-            )}
-          </Select>
-        </FormControl>
-        <FormControl style={{ width: "20%" }}>
-          <InputLabel id="demo-simple-select-label">
             <span style={{ color: "white" }}>المدينة</span>
           </InputLabel>
           <Select
@@ -291,6 +252,7 @@ export default function MainContent() {
       </Stack>
       {/*select city*/}
 
+      {/* <Selectcity /> */}
       {/*table */}
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
