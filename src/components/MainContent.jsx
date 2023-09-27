@@ -3,10 +3,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Prayer from "./Prayer";
-import Select from "@mui/material/Select";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
 import axios from "axios";
 import moment from "moment/moment";
 import Table from "@mui/material/Table";
@@ -20,43 +16,33 @@ import ReactCountryFlag from "react-country-flag";
 import "moment/dist/locale/ar";
 import SelectLocation from "./SelectLocation";
 moment.locale("ar");
-
+import Button from "@mui/material/Button";
 export default function MainContent() {
-  const avilableCities = [
-    {
-      displayName: "مكة المكرمة",
-      apiName: "Makkah al Mukarramah",
-    },
-    {
-      displayName: "الرياض",
-      apiName: "Riyadh",
-    },
-    {
-      displayName: "الدمام",
-      apiName: "Dommam",
-    },
-  ];
-
   const prayersArray = [
     {
       key: "Fajr",
       displayName: "الفجر",
+      image: "/src/images/fajr-prayer.png",
     },
     {
       key: "Dhuhr",
       displayName: "الظهر",
+      image: "/src/images/dhhr-prayer-mosque.png",
     },
     {
       key: "Asr",
       displayName: "العصر",
+      image: "/src/images/asr-prayer-mosque.png",
     },
     {
       key: "Sunset",
       displayName: "المغرب",
+      image: "/src/images/sunset-prayer-mosque.png",
     },
     {
       key: "Isha",
       displayName: "العشاء",
+      image: "/src/images/night-prayer-mosque.png",
     },
   ];
   //status
@@ -69,13 +55,8 @@ export default function MainContent() {
     Isha: "19:01",
   });
   const [timingsForMonth, setTimingsForMonth] = useState([]);
-
+  const [showtimingsForMonth, setShowtimingsForMonth] = useState(false);
   const [remainingTime, setRemainingTime] = useState("");
-
-  const [selectedCity, setSelectedCity] = useState({
-    displayName: "مكة المكرمة",
-    apiName: "Makkah al Mukarramah",
-  });
 
   const [today, setToday] = useState("");
   const [locationDetail, setLocationDetail] = useState({
@@ -99,7 +80,7 @@ export default function MainContent() {
     const reponse1 = await axios.get(
       `http://api.aladhan.com/v1/calendarByAddress/${moment().format(
         "yyyy/MM"
-      )}?address=${selectedCity.apiName}`
+      )}?address=${locationDetail.city}`
     );
 
     setTimings(response.data.data.timings);
@@ -112,7 +93,7 @@ export default function MainContent() {
 
   useEffect(() => {
     getTimings();
-  }, [selectedCity]);
+  }, [locationDetail]);
 
   const setupCountdownTimer = () => {
     const momentNow = moment();
@@ -160,7 +141,7 @@ export default function MainContent() {
     }
     const durationRemainingTime = moment.duration(remainingTime);
     setRemainingTime(
-      ` ${durationRemainingTime.seconds()} : ${durationRemainingTime.minutes()} : ${durationRemainingTime.hours()}`
+      `${durationRemainingTime.hours()} : ${durationRemainingTime.minutes()} :  ${durationRemainingTime.seconds()}`
     );
   };
 
@@ -180,16 +161,15 @@ export default function MainContent() {
     };
   }, [timings]);
 
-  const handleCityChange = (event) => {
-    const cityObject = avilableCities.find((city) => {
-      return city.apiName == event.target.value;
-    });
-    setSelectedCity(cityObject);
-  };
+  // const handleCityChange = (event) => {
+  //   const cityObject = avilableCities.find((city) => {
+  //     return city.apiName == event.target.value;
+  //   });
+  //   setSelectedCity(cityObject);
+  // };
   return (
     <>
       {/* top row */}
-
       <SelectLocation
         countrylocation={locationDetail.country}
         citylocation={locationDetail.city}
@@ -203,7 +183,7 @@ export default function MainContent() {
         </Grid>
         <Grid xs={5}>
           <div>
-            <h2>متبقي على صلاة {prayersArray[nextPrayerIndex].displayName}</h2>
+            <h2>Remains for the {prayersArray[nextPrayerIndex].key} prayer</h2>
             <h1>{remainingTime}</h1>
           </div>
         </Grid>
@@ -230,35 +210,34 @@ export default function MainContent() {
         style={{ marginTop: "50px" }}
       >
         <Prayer
-          name="الفجر"
+          name="Fajr"
           time={timings.Fajr}
           image="/src/images/fajr-prayer.png"
         />
         <Prayer
-          name="الظهر"
+          name="Dhuhr"
           time={timings.Dhuhr}
           image="/src/images/dhhr-prayer-mosque.png"
         />
         <Prayer
-          name="العصر"
+          name="Asr"
           time={timings.Asr}
           image="/src/images/asr-prayer-mosque.png"
         />
         <Prayer
-          name="المغرب"
+          name="Sunset"
           time={timings.Sunset}
           image="/src/images/sunset-prayer-mosque.png"
         />
         <Prayer
-          name="العشاء"
+          name="Isha"
           time={timings.Isha}
           image="/src/images/night-prayer-mosque.png"
         />
       </Stack>
       {/*prayers cards*/}
-
       {/*select city*/}
-      <Stack
+      {/* <Stack
         direction="row"
         justifyContent={"space-evenly"}
         style={{ margin: "40px" }}
@@ -281,42 +260,56 @@ export default function MainContent() {
             ))}
           </Select>
         </FormControl>
-      </Stack>
+      </Stack> */}
       {/*select city*/}
-
       {/* <Selectcity /> */}
       {/*table */}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">التاريخ</TableCell>
-              <TableCell align="center">الفجر</TableCell>
-              <TableCell align="center">الظهر</TableCell>
-              <TableCell align="center">العصر</TableCell>
-              <TableCell align="center">المغرب</TableCell>
-              <TableCell align="center">العشاء</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {timingsForMonth.map((data) => (
-              <TableRow
-                key={data.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="center" component="th" scope="row">
-                  {data.date.readable}
-                </TableCell>
-                <TableCell align="center">{data.timings.Fajr}</TableCell>
-                <TableCell align="center">{data.timings.Dhuhr}</TableCell>
-                <TableCell align="center">{data.timings.Asr}</TableCell>
-                <TableCell align="center">{data.timings.Sunset}</TableCell>
-                <TableCell align="center">{data.timings.Isha}</TableCell>
+      <Stack style={{ display: "flex", justifyContent: "center" }}>
+        <Button
+          style={{ padding: "10px", background: "#af2e57" }}
+          variant="contained"
+          color="success"
+          onClick={() => {
+            setShowtimingsForMonth(!showtimingsForMonth);
+          }}
+        >
+          Show the monthly calendar
+        </Button>
+      </Stack>
+
+      {showtimingsForMonth && (
+        <TableContainer style={{ marginTop: "50px" }} component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell align="center">date</TableCell>
+                <TableCell align="center">Fajr</TableCell>
+                <TableCell align="center">Dhuhr</TableCell>
+                <TableCell align="center">Asr</TableCell>
+                <TableCell align="center">Sunset</TableCell>
+                <TableCell align="center">Isha</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {timingsForMonth.map((data) => (
+                <TableRow
+                  key={data.name}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell align="center" component="th" scope="row">
+                    {data.date.readable}
+                  </TableCell>
+                  <TableCell align="center">{data.timings.Fajr}</TableCell>
+                  <TableCell align="center">{data.timings.Dhuhr}</TableCell>
+                  <TableCell align="center">{data.timings.Asr}</TableCell>
+                  <TableCell align="center">{data.timings.Sunset}</TableCell>
+                  <TableCell align="center">{data.timings.Isha}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
       {/*table */}
     </>
   );

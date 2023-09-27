@@ -32,9 +32,9 @@ const SelectLocation = () => {
       justifyContent={"space-evenly"}
       style={{ margin: "40px" }}
     >
-      <FormControl style={{ width: "20%" }}>
-        <InputLabel id="demo-simple-select-label">
-          <span style={{ color: "white" }}>البلد</span>
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+        <InputLabel id="demo-simple-select-filled-label">
+          <span style={{ color: "white" }}>Country</span>
         </InputLabel>
         <SelectUi
           data={countryData}
@@ -43,9 +43,9 @@ const SelectLocation = () => {
         />
       </FormControl>
       {city && (
-        <FormControl style={{ width: "20%" }}>
-          <InputLabel id="demo-simple-select-label">
-            <span style={{ color: "white" }}>المدينة</span>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <InputLabel id="demo-simple-select-filled-label">
+            <span style={{ color: "white" }}>City</span>
           </InputLabel>
           <SelectUi
             data={cityData}

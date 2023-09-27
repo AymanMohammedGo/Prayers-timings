@@ -6,13 +6,13 @@ import MenuItem from "@mui/material/MenuItem";
 const SelectUi = ({ data, selected, onChangeSelected }) => {
   return (
     <Select
+      style={{ background: "#af2e57" }}
+      labelId="demo-simple-select-filled-label"
+      id="demo-simple-select-filled"
       value={selected}
       onChange={(e) => {
         onChangeSelected(e.target.value);
       }}
-      labelId="demo-simple-select-label"
-      id="demo-simple-select"
-      label="Age"
     >
       {data.map((data) => (
         <MenuItem key={data.id} value={data}>

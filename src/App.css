@@ -8,7 +8,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@100;200;300;500;600;700&display=swap");
 
 html {
-  direction: rtl;
+  /* direction: rtl; */
   font-family: "Cairo", sans-serif;
   font-family: "IBM Plex Sans Arabic", sans-serif !important;
 }
