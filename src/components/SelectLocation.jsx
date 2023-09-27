@@ -7,16 +7,25 @@ import { City, Country, State } from "country-state-city";
 import SelectUi from "./UI/SelectUi";
 const SelectLocation = () => {
   let countryData = Country.getAllCountries();
-  const [stateData, setStateData] = useState();
-  const [country, setCountry] = useState(countryData[0]);
-  const [state, setState] = useState();
-  useEffect(() => {
-    setStateData(State.getStatesOfCountry(country?.isoCode));
-  }, [country]);
-  useEffect(() => {
-    stateData && setState(stateData[0]);
-  }, [stateData]);
+  const [cityData, setCityData] = useState();
 
+  const [country, setCountry] = useState(countryData[0]);
+  const [city, setCity] = useState();
+
+  useEffect(() => {
+    setCityData(State.getStatesOfCountry(country?.isoCode));
+  }, [country]);
+
+  useEffect(() => {
+    cityData && setCity(cityData[0]);
+  }, [cityData]);
+
+  const setChangeCountry = (e) => {
+    setCountry(e);
+  };
+  const setChangeCity = (e) => {
+    setCity(e);
+  };
   return (
     <Stack
       direction="row"
@@ -30,15 +39,19 @@ const SelectLocation = () => {
         <SelectUi
           data={countryData}
           selected={country}
-          setCountry={setCountry}
+          onChangeSelected={setChangeCountry}
         />
       </FormControl>
-      {state && (
+      {city && (
         <FormControl style={{ width: "20%" }}>
           <InputLabel id="demo-simple-select-label">
             <span style={{ color: "white" }}>المدينة</span>
           </InputLabel>
-          <SelectUi data={stateData} selected={state} setSelected={setState} />
+          <SelectUi
+            data={cityData}
+            selected={city}
+            onChangeSelected={setChangeCity}
+          />
         </FormControl>
       )}
     </Stack>

@@ -3,11 +3,13 @@
 import React, { useState } from "react";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-const SelectUi = ({ data, selected, setCountry }) => {
+const SelectUi = ({ data, selected, onChangeSelected }) => {
   return (
     <Select
-      value={selected.name}
-      onChange={setCountry}
+      value={selected}
+      onChange={(e) => {
+        onChangeSelected(e.target.value);
+      }}
       labelId="demo-simple-select-label"
       id="demo-simple-select"
       label="Age"

@@ -1,9 +1,10 @@
 # React + Vite + Material UI + Axios + Moment
-provides a minimal setup to get React working in Vite with HMR and some ESLint rules.\
+Provides minimal setup to run React in Vite using HMR and some ESLint rules.\
 Features:\
-Showing the times of the five prayers according to the name of the city\
-Show the name and time remaining for the next prayer\
-Show a monthly calendar of prayer times by city\
+Show the times of the five prayers according to the current location\
+Show the times of the five daily prayers by country and city name.
+Show the name of the next prayer\
+Show the remaining time for the next prayer\
+Show monthly calendar of prayer times by country and city\
 Show current date and time\
-
-
+Responsive to all screens
