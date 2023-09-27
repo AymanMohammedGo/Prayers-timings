@@ -16,7 +16,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
+import ReactCountryFlag from "react-country-flag";
 import "moment/dist/locale/ar";
 import SelectLocation from "./SelectLocation";
 moment.locale("ar");
@@ -78,12 +78,23 @@ export default function MainContent() {
   });
 
   const [today, setToday] = useState("");
-
+  const [locationDetail, setLocationDetail] = useState({
+    city: "Aleppo",
+    country: "Syria",
+  });
   const [nextPrayerIndex, setNextPrayerIndex] = useState(0);
 
+  const getLocation = async () => {
+    const getLocationDetail = await axios.get(
+      `http://ip-api.com/json/?fields=61439`
+    );
+    setLocationDetail(getLocationDetail.data);
+  };
   const getTimings = async () => {
     const response = await axios.get(
-      `https://api.aladhan.com/v1/timingsByCity?country=SA&city=${selectedCity.apiName}`
+      `https://api.aladhan.com/v1/timingsByCity/${moment().format(
+        "dd-MM-yyyy"
+      )}?city=${locationDetail.city}&country=${locationDetail.country}`
     );
     const reponse1 = await axios.get(
       `http://api.aladhan.com/v1/calendarByAddress/${moment().format(
@@ -92,8 +103,12 @@ export default function MainContent() {
     );
 
     setTimings(response.data.data.timings);
+    console.log(locationDetail);
     setTimingsForMonth(reponse1.data.data);
   };
+  useEffect(() => {
+    getLocation();
+  }, []);
 
   useEffect(() => {
     getTimings();
@@ -174,18 +189,35 @@ export default function MainContent() {
   return (
     <>
       {/* top row */}
-      <SelectLocation />
+
+      <SelectLocation
+        countrylocation={locationDetail.country}
+        citylocation={locationDetail.city}
+      />
       <Grid container>
-        <Grid xs={6}>
+        <Grid xs={5}>
           <div>
             <h2>{today}</h2>
-            <h1>{selectedCity.displayName}</h1>
+            <h1>{locationDetail.city}</h1>
           </div>
         </Grid>
-        <Grid xs={6}>
+        <Grid xs={5}>
           <div>
             <h2>متبقي على صلاة {prayersArray[nextPrayerIndex].displayName}</h2>
             <h1>{remainingTime}</h1>
+          </div>
+        </Grid>
+        <Grid xs={2}>
+          <div>
+            <ReactCountryFlag
+              countryCode={locationDetail.countryCode}
+              svg
+              style={{
+                width: "10em",
+                height: "11em",
+              }}
+              title="US"
+            />
           </div>
         </Grid>
       </Grid>
