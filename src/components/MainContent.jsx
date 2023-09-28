@@ -15,9 +15,34 @@ import Paper from "@mui/material/Paper";
 import ReactCountryFlag from "react-country-flag";
 import "moment/dist/locale/ar";
 import SelectLocation from "./SelectLocation";
-moment.locale("ar");
+import { City, Country, State } from "country-state-city";
 import Button from "@mui/material/Button";
 export default function MainContent() {
+  let countryData = Country.getAllCountries();
+  const [cityData, setCityData] = useState();
+
+  const [country, setCountry] = useState(countryData[0]);
+  const [city, setCity] = useState();
+
+  useEffect(() => {
+    setCityData(State.getStatesOfCountry(country?.isoCode));
+    console.log(country);
+  }, [country]);
+
+  const selectCity = () => {
+    const ci = cityData.find((e) => {
+      return e.name == locationDetail.regionName;
+    });
+    setCity(ci);
+  };
+
+  useEffect(() => {
+    if (country.name == locationDetail.country) {
+      cityData && selectCity();
+    } else {
+      cityData && setCity(cityData[0]);
+    }
+  }, [cityData]);
   const prayersArray = [
     {
       key: "Fajr",
@@ -62,6 +87,7 @@ export default function MainContent() {
   const [locationDetail, setLocationDetail] = useState({
     city: "Aleppo",
     country: "Syria",
+    regionName: "regionName",
   });
   const [nextPrayerIndex, setNextPrayerIndex] = useState(0);
 
@@ -70,21 +96,37 @@ export default function MainContent() {
       `http://ip-api.com/json/?fields=61439`
     );
     setLocationDetail(getLocationDetail.data);
+
+    const co = countryData.find((e) => {
+      return e.isoCode == getLocationDetail.data.countryCode;
+    });
+
+    setCountry(co);
   };
   const getTimings = async () => {
-    const response = await axios.get(
-      `https://api.aladhan.com/v1/timingsByCity/${moment().format(
-        "dd-MM-yyyy"
-      )}?city=${locationDetail.city}&country=${locationDetail.country}`
-    );
+    if (city && country) {
+      const response = await axios.get(
+        `https://api.aladhan.com/v1/timingsByCity/${moment().format(
+          "dd-MM-yyyy"
+        )}?city=${city.name}&country=${country.name}`
+      );
+      setTimings(response.data.data.timings);
+    }
+    if (country && !city) {
+      const response2 = await axios.get(
+        `https://api.aladhan.com/v1/timings/${moment().format(
+          "dd-MM-yyyy"
+        )}?latitude=${country.latitude}&longitude=${country.longitude}`
+      );
+      setTimings(response2.data.data.timings);
+    }
+
     const reponse1 = await axios.get(
-      `http://api.aladhan.com/v1/calendarByAddress/${moment().format(
+      `https://api.aladhan.com/v1/calendarByAddress/${moment().format(
         "yyyy/MM"
-      )}?address=${locationDetail.city}`
+      )}?address=${city.name}`
     );
 
-    setTimings(response.data.data.timings);
-    console.log(locationDetail);
     setTimingsForMonth(reponse1.data.data);
   };
   useEffect(() => {
@@ -93,7 +135,7 @@ export default function MainContent() {
 
   useEffect(() => {
     getTimings();
-  }, [locationDetail]);
+  }, [country, city]);
 
   const setupCountdownTimer = () => {
     const momentNow = moment();
@@ -171,14 +213,24 @@ export default function MainContent() {
     <>
       {/* top row */}
       <SelectLocation
-        countrylocation={locationDetail.country}
-        citylocation={locationDetail.city}
+        city={city}
+        country={country}
+        countryData={countryData}
+        cityData={cityData}
+        onChangeCountry={setCountry}
+        onChangecity={setCity}
       />
       <Grid container>
         <Grid xs={5}>
           <div>
             <h2>{today}</h2>
-            <h1>{locationDetail.city}</h1>
+            <h1>
+              {city
+                ? country.name == "Syria"
+                  ? city.name.slice(0, -12)
+                  : city.name
+                : country.name}
+            </h1>
           </div>
         </Grid>
         <Grid xs={5}>
@@ -190,7 +242,7 @@ export default function MainContent() {
         <Grid xs={2}>
           <div>
             <ReactCountryFlag
-              countryCode={locationDetail.countryCode}
+              countryCode={country.isoCode}
               svg
               style={{
                 width: "10em",
@@ -266,7 +318,7 @@ export default function MainContent() {
       {/*table */}
       <Stack style={{ display: "flex", justifyContent: "center" }}>
         <Button
-          style={{ padding: "10px", background: "#af2e57" }}
+          style={{ padding: "10px", background: "#af2e57", margin: "20px" }}
           variant="contained"
           color="success"
           onClick={() => {
