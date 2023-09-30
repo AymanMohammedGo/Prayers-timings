@@ -52,14 +52,9 @@ html {
 }
 .MuiSelect-select {
   color: white !important;
+  font-weight: 600 !important;
+  font-size: 1.3rem !important;
 }
 .MuiSvgIcon-root {
   color: white !important;
-}
-.MuiFormLabel-root,
-.MuiInputBase-root {
-  color: white !important;
-}
-.css-l4u8b9-MuiInputBase-root-MuiInput-root:before {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.8) !important;
 }

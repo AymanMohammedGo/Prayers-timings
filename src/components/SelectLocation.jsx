@@ -2,8 +2,8 @@
 import InputLabel from "@mui/material/InputLabel";
 import Stack from "@mui/material/Stack";
 import FormControl from "@mui/material/FormControl";
-import { useEffect, useState } from "react";
-import { City, Country, State } from "country-state-city";
+import Button from "@mui/material/Button";
+
 import SelectUi from "./UI/SelectUi";
 const SelectLocation = ({
   onChangeCountry,
@@ -22,33 +22,94 @@ const SelectLocation = ({
   return (
     <Stack
       direction="row"
-      justifyContent={"space-evenly"}
-      style={{ margin: "40px" }}
+      justifyContent={"space-between"}
+      alignItems="center"
+      margin="30px 0px 20px 0px"
     >
-      {/* <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
         <InputLabel id="demo-simple-select-filled-label">
-          <span style={{ color: "white" }}>Country</span>
-        </InputLabel> */}
-      <SelectUi
-        data={countryData}
-        selected={country}
-        onChangeSelected={setChangeCountry}
-        name="Country"
-      />
-      {/* </FormControl> */}
-      {city && (
-        // <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-        //   <InputLabel id="demo-simple-select-filled-label">
-        //     <span style={{ color: "white" }}>City</span>
-        //   </InputLabel>
+          <span
+            style={{
+              color: "white",
+              fontSize: "1rem",
+            }}
+          >
+            Country
+          </span>
+        </InputLabel>
         <SelectUi
-          data={cityData}
-          selected={city}
-          onChangeSelected={setChangeCity}
-          name="City"
+          data={countryData}
+          selected={country}
+          onChangeSelected={setChangeCountry}
         />
-        //</FormControl>
+      </FormControl>
+      {city && (
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <InputLabel id="demo-simple-select-filled-label">
+            <span
+              style={{
+                color: "white",
+                fontSize: "1rem",
+              }}
+            >
+              City
+            </span>
+          </InputLabel>
+          <SelectUi
+            data={cityData}
+            selected={city}
+            onChangeSelected={setChangeCity}
+          />
+        </FormControl>
       )}
+      <Button
+        style={{
+          fontWeight: "900",
+          fontSize: "1rem",
+          padding: "10px",
+          background: "#af2e57",
+          margin: "20px 0px",
+        }}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          window.scrollTo(0, 600);
+        }}
+      >
+        Monthly calendar
+      </Button>
+      <Button
+        style={{
+          fontWeight: "900",
+          fontSize: "1rem",
+          padding: "10px",
+          background: "#af2e57",
+          margin: "20px 0px",
+        }}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          window.scrollTo(0, 600);
+        }}
+      >
+        Monthly calendar
+      </Button>
+      <Button
+        style={{
+          fontWeight: "900",
+          fontSize: "1rem",
+          padding: "10px",
+          background: "#af2e57",
+          margin: "20px 0px",
+        }}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          window.scrollTo(0, 600);
+        }}
+      >
+        Monthly calendar
+      </Button>
     </Stack>
   );
 };

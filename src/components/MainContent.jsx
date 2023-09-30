@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
@@ -16,7 +16,7 @@ import ReactCountryFlag from "react-country-flag";
 import "moment/dist/locale/ar";
 import SelectLocation from "./SelectLocation";
 import { City, Country, State } from "country-state-city";
-import Button from "@mui/material/Button";
+
 export default function MainContent() {
   let countryData = Country.getAllCountries();
   const [cityData, setCityData] = useState();
@@ -26,7 +26,6 @@ export default function MainContent() {
 
   useEffect(() => {
     setCityData(State.getStatesOfCountry(country?.isoCode));
-    console.log(country);
   }, [country]);
 
   const selectCity = () => {
@@ -80,7 +79,6 @@ export default function MainContent() {
     Isha: "19:01",
   });
   const [timingsForMonth, setTimingsForMonth] = useState([]);
-  const [showtimingsForMonth, setShowtimingsForMonth] = useState(false);
   const [remainingTime, setRemainingTime] = useState("");
 
   const [today, setToday] = useState("");
@@ -111,8 +109,7 @@ export default function MainContent() {
         )}?city=${city.name}&country=${country.name}`
       );
       setTimings(response.data.data.timings);
-    }
-    if (country && !city) {
+    } else if (country && !city) {
       const response2 = await axios.get(
         `https://api.aladhan.com/v1/timings/${moment().format(
           "dd-MM-yyyy"
@@ -120,14 +117,15 @@ export default function MainContent() {
       );
       setTimings(response2.data.data.timings);
     }
-
-    const reponse1 = await axios.get(
-      `https://api.aladhan.com/v1/calendarByAddress/${moment().format(
-        "yyyy/MM"
-      )}?address=${city.name}`
-    );
-
-    setTimingsForMonth(reponse1.data.data);
+    if (cityData) {
+      const reponse1 = await axios.get(
+        `https://api.aladhan.com/v1/calendarByCity/${moment().format(
+          "yyyy/MM"
+        )}?city=${city.name}&country=${country.name}`
+      );
+      console.log(reponse1.data.data);
+      setTimingsForMonth(reponse1.data.data);
+    }
   };
   useEffect(() => {
     getLocation();
@@ -203,15 +201,8 @@ export default function MainContent() {
     };
   }, [timings]);
 
-  // const handleCityChange = (event) => {
-  //   const cityObject = avilableCities.find((city) => {
-  //     return city.apiName == event.target.value;
-  //   });
-  //   setSelectedCity(cityObject);
-  // };
   return (
     <>
-      {/* top row */}
       <SelectLocation
         city={city}
         country={country}
@@ -220,6 +211,7 @@ export default function MainContent() {
         onChangeCountry={setCountry}
         onChangecity={setCity}
       />
+
       <Grid container>
         <Grid xs={5}>
           <div>
@@ -259,7 +251,7 @@ export default function MainContent() {
       <Stack
         direction="row"
         justifyContent={"space-around"}
-        style={{ marginTop: "50px" }}
+        style={{ marginTop: "50px", justifyContent: "space-between" }}
       >
         <Prayer
           name="Fajr"
@@ -287,59 +279,117 @@ export default function MainContent() {
           image="/src/images/night-prayer-mosque.png"
         />
       </Stack>
-      {/*prayers cards*/}
-      {/*select city*/}
-      {/* <Stack
-        direction="row"
-        justifyContent={"space-evenly"}
-        style={{ margin: "40px" }}
+      <Paper
+        style={{ marginTop: "20px" }}
+        sx={{ width: "100%", overflow: "hidden" }}
       >
-        <FormControl style={{ width: "20%" }}>
-          <InputLabel id="demo-simple-select-label">
-            <span style={{ color: "white" }}>المدينة</span>
-          </InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={selectedCity.apiName}
-            label="Age"
-            onChange={handleCityChange}
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table
+            style={{ background: "#af2e5708" }}
+            stickyHeader
+            aria-label="sticky table"
           >
-            {avilableCities.map((city) => (
-              <MenuItem key={city.apiName} value={city.apiName}>
-                {city.displayName}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Stack> */}
-      {/*select city*/}
-      {/* <Selectcity /> */}
-      {/*table */}
-      <Stack style={{ display: "flex", justifyContent: "center" }}>
-        <Button
-          style={{ padding: "10px", background: "#af2e57", margin: "20px" }}
-          variant="contained"
-          color="success"
-          onClick={() => {
-            setShowtimingsForMonth(!showtimingsForMonth);
-          }}
-        >
-          Show the monthly calendar
-        </Button>
-      </Stack>
-
-      {showtimingsForMonth && (
-        <TableContainer style={{ marginTop: "50px" }} component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">date</TableCell>
-                <TableCell align="center">Fajr</TableCell>
-                <TableCell align="center">Dhuhr</TableCell>
-                <TableCell align="center">Asr</TableCell>
-                <TableCell align="center">Sunset</TableCell>
-                <TableCell align="center">Isha</TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  date
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  hijri
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  Imsak
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  Fajr
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  Sunrise
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  Dhuhr
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  Asr
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  Sunset
+                </TableCell>
+                <TableCell
+                  style={{
+                    fontWeight: "900",
+                    fontSize: "1rem",
+                    color: "white",
+                    backgroundColor: "#af2e57",
+                  }}
+                  align="center"
+                >
+                  Isha
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -349,9 +399,14 @@ export default function MainContent() {
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="center" component="th" scope="row">
-                    {data.date.readable}
+                    {data.date.gregorian.date}
                   </TableCell>
+                  <TableCell align="center" component="th" scope="row">
+                    {data.date.hijri.date}
+                  </TableCell>
+                  <TableCell align="center">{data.timings.Imsak}</TableCell>
                   <TableCell align="center">{data.timings.Fajr}</TableCell>
+                  <TableCell align="center">{data.timings.Sunrise}</TableCell>
                   <TableCell align="center">{data.timings.Dhuhr}</TableCell>
                   <TableCell align="center">{data.timings.Asr}</TableCell>
                   <TableCell align="center">{data.timings.Sunset}</TableCell>
@@ -361,8 +416,7 @@ export default function MainContent() {
             </TableBody>
           </Table>
         </TableContainer>
-      )}
-      {/*table */}
+      </Paper>
     </>
   );
 }
