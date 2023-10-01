@@ -43,6 +43,56 @@ const SelectLocation = ({
           onChangeSelected={setChangeCountry}
         />
       </FormControl>
+
+      <Button
+        style={{
+          fontWeight: "900",
+          fontSize: "1rem",
+          padding: "10px",
+          background: "rgb(69 98 149)",
+          margin: "20px 0px",
+        }}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          window.scrollTo(0, 600);
+        }}
+      >
+        Monthly calendar
+      </Button>
+      <Button
+        style={{
+          fontWeight: "900",
+          fontSize: "1rem",
+          padding: "10px",
+          background: "rgb(69 98 149)",
+          margin: "20px 0px",
+        }}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          window.scrollTo(0, 600);
+        }}
+      >
+        Contact us
+      </Button>
+      <Button
+        style={{
+          fontWeight: "900",
+          fontSize: "1rem",
+          padding: "10px",
+          background: "rgb(69 98 149)",
+          margin: "20px 0px",
+        }}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          window.scrollTo(0, 600);
+        }}
+      >
+        different topics
+      </Button>
+
       {city && (
         <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <InputLabel id="demo-simple-select-filled-label">
@@ -62,54 +112,6 @@ const SelectLocation = ({
           />
         </FormControl>
       )}
-      <Button
-        style={{
-          fontWeight: "900",
-          fontSize: "1rem",
-          padding: "10px",
-          background: "#af2e57",
-          margin: "20px 0px",
-        }}
-        variant="contained"
-        color="success"
-        onClick={() => {
-          window.scrollTo(0, 600);
-        }}
-      >
-        Monthly calendar
-      </Button>
-      <Button
-        style={{
-          fontWeight: "900",
-          fontSize: "1rem",
-          padding: "10px",
-          background: "#af2e57",
-          margin: "20px 0px",
-        }}
-        variant="contained"
-        color="success"
-        onClick={() => {
-          window.scrollTo(0, 600);
-        }}
-      >
-        Monthly calendar
-      </Button>
-      <Button
-        style={{
-          fontWeight: "900",
-          fontSize: "1rem",
-          padding: "10px",
-          background: "#af2e57",
-          margin: "20px 0px",
-        }}
-        variant="contained"
-        color="success"
-        onClick={() => {
-          window.scrollTo(0, 600);
-        }}
-      >
-        Monthly calendar
-      </Button>
     </Stack>
   );
 };

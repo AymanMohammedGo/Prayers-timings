@@ -180,9 +180,21 @@ export default function MainContent() {
       remainingTime = totalDiffernce;
     }
     const durationRemainingTime = moment.duration(remainingTime);
-    setRemainingTime(
-      `${durationRemainingTime.hours()} : ${durationRemainingTime.minutes()} :  ${durationRemainingTime.seconds()}`
-    );
+
+    const hour =
+      durationRemainingTime.hours() < 10
+        ? "0" + durationRemainingTime.hours()
+        : durationRemainingTime.hours();
+    const minutes =
+      durationRemainingTime.minutes() < 10
+        ? "0" + durationRemainingTime.minutes()
+        : durationRemainingTime.minutes();
+    const seconds =
+      durationRemainingTime.seconds() < 10
+        ? "0" + durationRemainingTime.seconds()
+        : durationRemainingTime.seconds();
+
+    setRemainingTime(`${hour} : ${minutes} :  ${seconds}`);
   };
 
   useEffect(() => {
@@ -227,7 +239,20 @@ export default function MainContent() {
         </Grid>
         <Grid xs={5}>
           <div>
-            <h2>Remains for the {prayersArray[nextPrayerIndex].key} prayer</h2>
+            <h2>
+              Remains for{" "}
+              <span
+                style={{
+                  padding: "5px",
+                  borderRadius: "8px",
+                  backgroundColor: "#af2e57",
+                  color: "white",
+                }}
+              >
+                {prayersArray[nextPrayerIndex].key}
+              </span>{" "}
+              prayer
+            </h2>
             <h1>{remainingTime}</h1>
           </div>
         </Grid>
@@ -395,7 +420,12 @@ export default function MainContent() {
             <TableBody>
               {timingsForMonth.map((data) => (
                 <TableRow
-                  key={data.name}
+                  style={
+                    moment().format("DD-MM-YYYY") == data.date.gregorian.date
+                      ? { backgroundColor: "#af2e573b" }
+                      : { backgroundColor: "white" }
+                  }
+                  key={data.date.gregorian.date}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell align="center" component="th" scope="row">
