@@ -58,7 +58,7 @@ const SelectLocation = ({
           window.scrollTo(0, 600);
         }}
       >
-        Monthly calendar
+        Monthly Calendar
       </Button>
       <Button
         style={{
@@ -74,7 +74,7 @@ const SelectLocation = ({
           window.scrollTo(0, 600);
         }}
       >
-        Contact us
+        Contact Us
       </Button>
       <Button
         style={{
@@ -90,7 +90,7 @@ const SelectLocation = ({
           window.scrollTo(0, 600);
         }}
       >
-        different topics
+        Different Topics
       </Button>
 
       {city && (

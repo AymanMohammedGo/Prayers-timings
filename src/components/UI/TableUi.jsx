@@ -130,10 +130,14 @@ const TableUi = ({ timingsForMonth, name }) => {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell align="center" component="th" scope="row">
-                {data.date.gregorian.date}
+                {name == "Gregorian"
+                  ? data.date.gregorian.date
+                  : data.date.hijri.date}
               </TableCell>
               <TableCell align="center" component="th" scope="row">
-                {data.date.hijri.date}
+                {name == "Gregorian"
+                  ? data.date.hijri.date
+                  : data.date.gregorian.date}
               </TableCell>
               <TableCell align="center">{data.timings.Imsak}</TableCell>
               <TableCell align="center">{data.timings.Fajr}</TableCell>

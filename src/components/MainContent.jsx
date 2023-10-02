@@ -11,6 +11,7 @@ import "moment/dist/locale/ar";
 import SelectLocation from "./SelectLocation";
 import { City, Country, State } from "country-state-city";
 import TableUi from "./UI/TableUi";
+import Button from "@mui/material/Button";
 
 export default function MainContent() {
   let countryData = Country.getAllCountries();
@@ -75,7 +76,7 @@ export default function MainContent() {
   });
   const [timingsForMonth, setTimingsForMonth] = useState([]);
   const [timingsForMonthHijri, setTimingsForMonthHijri] = useState([]);
-
+  const [ShowCalendar, setShowCalendar] = useState(false);
   const [remainingTime, setRemainingTime] = useState("");
 
   const [today, setToday] = useState("");
@@ -120,18 +121,14 @@ export default function MainContent() {
           "yyyy/MM"
         )}?city=${city.name}&country=${country.name}`
       );
-      // const reponse2 = await axios.get(
-      //   `https://api.aladhan.com/v1/hijriCalendarByCity/${moment().format(
-      //     "iyyy/iM"
-      //   )}?city=${city.name}&country=${country.name}`
-      // );
       setTimingsForMonth(reponse1.data.data);
-      console.log(
-        timingsForMonth[0].date.hijri.month.number,
-        timingsForMonth[0].date.hijri.year
+      const yearHijri = timingsForMonth[0].date.hijri.year;
+      const monthHijri = String(timingsForMonth[0].date.hijri.month.number);
+      const reponse2 = await axios.get(
+        `https://api.aladhan.com/v1/hijriCalendarByCity/${yearHijri}/${monthHijri}?city=${city.name}&country=${country.name}`
       );
-      //setMomentHijri()
-      //setTimingsForMonthHijri(reponse2.data.data);
+      console.log(reponse2.data.data);
+      setTimingsForMonthHijri(reponse2.data.data);
     }
   };
   useEffect(() => {
@@ -315,10 +312,32 @@ export default function MainContent() {
         style={{ marginTop: "20px" }}
         sx={{ width: "100%", overflow: "hidden" }}
       >
-        <TableUi timingsForMonth={timingsForMonth} name="Gregorian" />
-        {console.log(timingsForMonthHijri)}
-        {/* <TableUi timingsForMonth={timingsForMonthHijri} name="Hijri" /> */}
+        {!ShowCalendar && (
+          <TableUi timingsForMonth={timingsForMonth} name="Gregorian" />
+        )}
+        {ShowCalendar && (
+          <TableUi timingsForMonth={timingsForMonthHijri} name="Hijri" />
+        )}
       </Paper>
+      <Button
+        style={{
+          display: "flex",
+          fontWeight: "900",
+          fontSize: "1rem",
+          padding: "10px",
+          background: "rgb(69 98 149)",
+          margin: "20px auto",
+        }}
+        variant="contained"
+        color="success"
+        onClick={() => {
+          setShowCalendar(!ShowCalendar);
+        }}
+      >
+        {ShowCalendar
+          ? "Show The Gregorian Calendar"
+          : "Show The Hijri Calendar"}
+      </Button>
     </>
   );
 }
