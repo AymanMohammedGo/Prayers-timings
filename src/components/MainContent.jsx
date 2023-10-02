@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Prayer from "./Prayer";
 import axios from "axios";
 import moment from "moment/moment";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ReactCountryFlag from "react-country-flag";
 import "moment/dist/locale/ar";
 import SelectLocation from "./SelectLocation";
 import { City, Country, State } from "country-state-city";
+import TableUi from "./UI/TableUi";
 
 export default function MainContent() {
   let countryData = Country.getAllCountries();
@@ -79,6 +74,8 @@ export default function MainContent() {
     Isha: "19:01",
   });
   const [timingsForMonth, setTimingsForMonth] = useState([]);
+  const [timingsForMonthHijri, setTimingsForMonthHijri] = useState([]);
+
   const [remainingTime, setRemainingTime] = useState("");
 
   const [today, setToday] = useState("");
@@ -123,8 +120,18 @@ export default function MainContent() {
           "yyyy/MM"
         )}?city=${city.name}&country=${country.name}`
       );
-      console.log(reponse1.data.data);
+      // const reponse2 = await axios.get(
+      //   `https://api.aladhan.com/v1/hijriCalendarByCity/${moment().format(
+      //     "iyyy/iM"
+      //   )}?city=${city.name}&country=${country.name}`
+      // );
       setTimingsForMonth(reponse1.data.data);
+      console.log(
+        timingsForMonth[0].date.hijri.month.number,
+        timingsForMonth[0].date.hijri.year
+      );
+      //setMomentHijri()
+      //setTimingsForMonthHijri(reponse2.data.data);
     }
   };
   useEffect(() => {
@@ -308,144 +315,9 @@ export default function MainContent() {
         style={{ marginTop: "20px" }}
         sx={{ width: "100%", overflow: "hidden" }}
       >
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table
-            style={{ background: "#af2e5708" }}
-            stickyHeader
-            aria-label="sticky table"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  date
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  hijri
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  Imsak
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  Fajr
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  Sunrise
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  Dhuhr
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  Asr
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  Sunset
-                </TableCell>
-                <TableCell
-                  style={{
-                    fontWeight: "900",
-                    fontSize: "1rem",
-                    color: "white",
-                    backgroundColor: "#af2e57",
-                  }}
-                  align="center"
-                >
-                  Isha
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {timingsForMonth.map((data) => (
-                <TableRow
-                  style={
-                    moment().format("DD-MM-YYYY") == data.date.gregorian.date
-                      ? { backgroundColor: "#af2e573b" }
-                      : { backgroundColor: "white" }
-                  }
-                  key={data.date.gregorian.date}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center" component="th" scope="row">
-                    {data.date.gregorian.date}
-                  </TableCell>
-                  <TableCell align="center" component="th" scope="row">
-                    {data.date.hijri.date}
-                  </TableCell>
-                  <TableCell align="center">{data.timings.Imsak}</TableCell>
-                  <TableCell align="center">{data.timings.Fajr}</TableCell>
-                  <TableCell align="center">{data.timings.Sunrise}</TableCell>
-                  <TableCell align="center">{data.timings.Dhuhr}</TableCell>
-                  <TableCell align="center">{data.timings.Asr}</TableCell>
-                  <TableCell align="center">{data.timings.Sunset}</TableCell>
-                  <TableCell align="center">{data.timings.Isha}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <TableUi timingsForMonth={timingsForMonth} name="Gregorian" />
+        {console.log(timingsForMonthHijri)}
+        {/* <TableUi timingsForMonth={timingsForMonthHijri} name="Hijri" /> */}
       </Paper>
     </>
   );
