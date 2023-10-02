@@ -12,6 +12,8 @@ import SelectLocation from "./SelectLocation";
 import { City, Country, State } from "country-state-city";
 import TableUi from "./UI/TableUi";
 import Button from "@mui/material/Button";
+import Numbers from "./Numbers";
+import Container from "@mui/material/Container";
 
 export default function MainContent() {
   let countryData = Country.getAllCountries();
@@ -78,7 +80,6 @@ export default function MainContent() {
   const [timingsForMonthHijri, setTimingsForMonthHijri] = useState([]);
   const [ShowCalendar, setShowCalendar] = useState(false);
   const [remainingTime, setRemainingTime] = useState("");
-
   const [today, setToday] = useState("");
   const [locationDetail, setLocationDetail] = useState({
     city: "Aleppo",
@@ -274,9 +275,7 @@ export default function MainContent() {
           </div>
         </Grid>
       </Grid>
-      {/* top row */}
       <Divider style={{ borderColor: "white", opacity: 0.1 }} />
-      {/*prayers cards*/}
       <Stack
         direction="row"
         justifyContent={"space-around"}
@@ -338,6 +337,9 @@ export default function MainContent() {
           ? "Show The Gregorian Calendar"
           : "Show The Hijri Calendar"}
       </Button>
+      <Container fixed>
+        <Numbers />
+      </Container>
     </>
   );
 }

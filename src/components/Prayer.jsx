@@ -9,7 +9,17 @@ export default function MediaCard({ name, time, image }) {
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia sx={{ height: 300 }} image={image} />
       <CardContent>
-        <h2 style={{ textAlign: "center" }}>{name}</h2>
+        <h2
+          style={{
+            color: "#ffffff",
+            textAlign: "center",
+            padding: "5px",
+            backgroundColor: "#af2e57",
+            borderRadius: "9px",
+          }}
+        >
+          {name}
+        </h2>
         <Typography variant="h1" color="text.secondary">
           {time}
         </Typography>
