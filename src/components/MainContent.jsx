@@ -14,6 +14,7 @@ import TableUi from "./UI/TableUi";
 import Button from "@mui/material/Button";
 import Numbers from "./Numbers";
 import Container from "@mui/material/Container";
+import ScrollTop from "./ScrollTop";
 
 export default function MainContent() {
   let countryData = Country.getAllCountries();
@@ -340,6 +341,7 @@ export default function MainContent() {
       <Container fixed>
         <Numbers />
       </Container>
+      <ScrollTop />
     </>
   );
 }

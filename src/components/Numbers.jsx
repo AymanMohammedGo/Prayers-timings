@@ -1,6 +1,5 @@
-import image from "../images/background.jpg";
 const Numbers = () => {
-  return <img src={image} />;
+  return;
 };
 
 export default Numbers;
