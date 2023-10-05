@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./ContactUs.css";
 
 const ContactUs = () => {
+  const [count, setCount] = useState(0);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,6 +36,7 @@ const ContactUs = () => {
       // You can submit the form data to your backend or perform other actions here.
       console.log("Form submitted:", formData);
       setIsSubmitted(true);
+      setCount(5);
     }
   };
 
@@ -48,12 +51,30 @@ const ContactUs = () => {
       [name]: "",
     });
   };
+  useEffect(() => {
+    if (count > 0) {
+      const timerId = setInterval(() => {
+        setCount((count) => count - 1);
+      }, 1000);
+      return () => clearInterval(timerId);
+    } else {
+      setIsSubmitted(false);
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    }
+  }, [count]);
+
   return (
     <>
       <div className="contact-us">
         <h2>Contact Us</h2>
         {isSubmitted ? (
-          <div className="success-message">Thank you for your submission!</div>
+          <div className="success-message">
+            Thank you for your submission! {count}
+          </div>
         ) : (
           <form onSubmit={handleSubmit}>
             <div className="form-control">
