@@ -1,4 +1,3 @@
-import React from "react";
 import arrow from "../images/arrow-up-circle-fill.svg";
 const ScrollTop = () => {
   const scroll = () => {
@@ -8,14 +7,15 @@ const ScrollTop = () => {
     });
   };
   return (
-    <div className="scrollUp">
+    <div style={{ position: "relative" }} className="scrollUp">
       <img
         style={{
           border: "4px solid white",
           borderRadius: "88px",
-          width: "80px",
-          position: "absolute",
+          width: "60px",
+          position: "fixed",
           left: "50px",
+          bottom: "20px",
         }}
         src={arrow}
         alt=""

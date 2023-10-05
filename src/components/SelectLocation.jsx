@@ -46,6 +46,7 @@ const SelectLocation = ({
 
       <Button
         style={{
+          behavior: "smooth",
           fontWeight: "900",
           fontSize: "1rem",
           padding: "10px",
@@ -55,7 +56,7 @@ const SelectLocation = ({
         variant="contained"
         color="success"
         onClick={() => {
-          window.scrollTo(0, 600);
+          window.scrollTo({ top: 600, behavior: "smooth" });
         }}
       >
         Monthly Calendar
@@ -71,7 +72,7 @@ const SelectLocation = ({
         variant="contained"
         color="success"
         onClick={() => {
-          window.scrollTo(0, 600);
+          window.scrollTo({ top: 600, behavior: "smooth" });
         }}
       >
         Contact Us
@@ -87,7 +88,7 @@ const SelectLocation = ({
         variant="contained"
         color="success"
         onClick={() => {
-          window.scrollTo(0, 600);
+          window.scrollTo({ top: 600, behavior: "smooth" });
         }}
       >
         Different Topics

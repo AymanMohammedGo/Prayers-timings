@@ -15,6 +15,7 @@ import Button from "@mui/material/Button";
 import Numbers from "./Numbers";
 import Container from "@mui/material/Container";
 import ScrollTop from "./ScrollTop";
+import ContactUs from "./ContactUs";
 
 export default function MainContent() {
   let countryData = Country.getAllCountries();
@@ -129,7 +130,6 @@ export default function MainContent() {
       const reponse2 = await axios.get(
         `https://api.aladhan.com/v1/hijriCalendarByCity/${yearHijri}/${monthHijri}?city=${city.name}&country=${country.name}`
       );
-      console.log(reponse2.data.data);
       setTimingsForMonthHijri(reponse2.data.data);
     }
   };
@@ -341,6 +341,7 @@ export default function MainContent() {
       <Container fixed>
         <Numbers />
       </Container>
+      <ContactUs />
       <ScrollTop />
     </>
   );
