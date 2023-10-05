@@ -30,7 +30,12 @@ export default function MainContent() {
 
   const selectCity = () => {
     const ci = cityData.find((e) => {
-      return e.name == locationDetail.regionName;
+      console.log(cityData);
+      if (locationDetail.regionName == "Rif-dimashq") {
+        return e.name == "Rif Dimashq Governorate";
+      } else {
+        return e.name == locationDetail.regionName;
+      }
     });
     setCity(ci);
   };
@@ -86,7 +91,7 @@ export default function MainContent() {
   const [locationDetail, setLocationDetail] = useState({
     city: "Aleppo",
     country: "Syria",
-    regionName: "regionName",
+    regionName: "Aleppo Governorate",
   });
   const [nextPrayerIndex, setNextPrayerIndex] = useState(0);
 
@@ -95,7 +100,6 @@ export default function MainContent() {
       `http://ip-api.com/json/?fields=61439`
     );
     setLocationDetail(getLocationDetail.data);
-
     const co = countryData.find((e) => {
       return e.isoCode == getLocationDetail.data.countryCode;
     });
@@ -205,10 +209,6 @@ export default function MainContent() {
 
   useEffect(() => {
     let interval = setInterval(() => {
-      // setTimer((t) => {
-      //   return t - 1;
-      // });
-
       setupCountdownTimer();
       const t = moment();
       setToday(t.format("MMM Do YYYY | hh:mm:ss "));
@@ -321,6 +321,7 @@ export default function MainContent() {
       </Paper>
       <Button
         style={{
+          width: "100%",
           display: "flex",
           fontWeight: "900",
           fontSize: "1rem",
@@ -338,9 +339,9 @@ export default function MainContent() {
           ? "Show The Gregorian Calendar"
           : "Show The Hijri Calendar"}
       </Button>
-      <Container fixed>
-        <Numbers />
-      </Container>
+
+      <Numbers />
+
       <ContactUs />
       <ScrollTop />
     </>
