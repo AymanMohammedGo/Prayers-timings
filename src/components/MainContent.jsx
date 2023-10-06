@@ -13,7 +13,6 @@ import { City, Country, State } from "country-state-city";
 import TableUi from "./UI/TableUi";
 import Button from "@mui/material/Button";
 import Numbers from "./Numbers";
-import Container from "@mui/material/Container";
 import ScrollTop from "./ScrollTop";
 import ContactUs from "./ContactUs";
 
@@ -23,7 +22,13 @@ export default function MainContent() {
 
   const [country, setCountry] = useState(countryData[0]);
   const [city, setCity] = useState();
-
+  const [timings, setTimings] = useState({
+    Fajr: "04:06",
+    Dhuhr: "11:27",
+    Asr: "14:54",
+    Sunset: "17:31",
+    Isha: "19:01",
+  });
   useEffect(() => {
     setCityData(State.getStatesOfCountry(country?.isoCode));
   }, [country]);
@@ -50,39 +55,32 @@ export default function MainContent() {
   const prayersArray = [
     {
       key: "Fajr",
-      displayName: "الفجر",
+      time: timings.Fajr,
       image: "/src/images/fajr-prayer.png",
     },
     {
       key: "Dhuhr",
-      displayName: "الظهر",
+      time: timings.Dhuhr,
       image: "/src/images/dhhr-prayer-mosque.png",
     },
     {
       key: "Asr",
-      displayName: "العصر",
+      time: timings.Asr,
       image: "/src/images/asr-prayer-mosque.png",
     },
     {
       key: "Sunset",
-      displayName: "المغرب",
+      time: timings.Sunset,
       image: "/src/images/sunset-prayer-mosque.png",
     },
     {
       key: "Isha",
-      displayName: "العشاء",
+      time: timings.Isha,
       image: "/src/images/night-prayer-mosque.png",
     },
   ];
   //status
 
-  const [timings, setTimings] = useState({
-    Fajr: "04:06",
-    Dhuhr: "11:27",
-    Asr: "14:54",
-    Sunset: "17:31",
-    Isha: "19:01",
-  });
   const [timingsForMonth, setTimingsForMonth] = useState([]);
   const [timingsForMonthHijri, setTimingsForMonthHijri] = useState([]);
   const [ShowCalendar, setShowCalendar] = useState(false);
@@ -282,31 +280,14 @@ export default function MainContent() {
         justifyContent={"space-around"}
         style={{ marginTop: "50px", justifyContent: "space-between" }}
       >
-        <Prayer
-          name="Fajr"
-          time={timings.Fajr}
-          image="/src/images/fajr-prayer.png"
-        />
-        <Prayer
-          name="Dhuhr"
-          time={timings.Dhuhr}
-          image="/src/images/dhhr-prayer-mosque.png"
-        />
-        <Prayer
-          name="Asr"
-          time={timings.Asr}
-          image="/src/images/asr-prayer-mosque.png"
-        />
-        <Prayer
-          name="Sunset"
-          time={timings.Sunset}
-          image="/src/images/sunset-prayer-mosque.png"
-        />
-        <Prayer
-          name="Isha"
-          time={timings.Isha}
-          image="/src/images/night-prayer-mosque.png"
-        />
+        {prayersArray.map((prayer, index) => (
+          <Prayer
+            key={index}
+            name={prayer.key}
+            time={prayer.time}
+            image={prayer.image}
+          />
+        ))}
       </Stack>
       <Paper
         style={{ marginTop: "20px" }}
@@ -339,9 +320,7 @@ export default function MainContent() {
           ? "Show The Gregorian Calendar"
           : "Show The Hijri Calendar"}
       </Button>
-
       <Numbers />
-
       <ContactUs />
       <ScrollTop />
     </>
