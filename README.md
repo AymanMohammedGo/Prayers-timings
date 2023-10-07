@@ -1,6 +1,6 @@
 # React + Vite + Material UI + Axios + Moment
 
-Demo : https://prayer-times20.netlify.app/.\
+Demo : https://prayer-times20.netlify.app/ \
 Provides minimal setup to run React in Vite using HMR and some ESLint rules.\
 Features:\
 Show the times of the five prayers according to the current location\
