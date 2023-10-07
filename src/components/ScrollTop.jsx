@@ -11,7 +11,6 @@ const ScrollTop = () => {
   };
   useEffect(() => {
     if (window.scrollY > 0) {
-      console.log(window.scrollY);
       setSc(true);
     }
   }, [window.scrollY]);

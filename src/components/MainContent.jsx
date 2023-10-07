@@ -15,6 +15,11 @@ import Button from "@mui/material/Button";
 import Numbers from "./Numbers";
 import ScrollTop from "./ScrollTop";
 import ContactUs from "./ContactUs";
+import Fajr from "../images/fajr-prayer.png";
+import Dhuhr from "../images/dhhr-prayer-mosque.png";
+import Asr from "../images/asr-prayer-mosque.png";
+import Isha from "../images/night-prayer-mosque.png";
+import Sunset from "../images/sunset-prayer-mosque.png";
 
 export default function MainContent() {
   let countryData = Country.getAllCountries();
@@ -35,7 +40,6 @@ export default function MainContent() {
 
   const selectCity = () => {
     const ci = cityData.find((e) => {
-      console.log(cityData);
       if (locationDetail.regionName == "Rif-dimashq") {
         return e.name == "Rif Dimashq Governorate";
       } else {
@@ -56,27 +60,27 @@ export default function MainContent() {
     {
       key: "Fajr",
       time: timings.Fajr,
-      image: "/src/images/fajr-prayer.png",
+      image: { Fajr },
     },
     {
       key: "Dhuhr",
       time: timings.Dhuhr,
-      image: "/src/images/dhhr-prayer-mosque.png",
+      image: { Dhuhr },
     },
     {
       key: "Asr",
       time: timings.Asr,
-      image: "/src/images/asr-prayer-mosque.png",
+      image: { Asr },
     },
     {
       key: "Sunset",
       time: timings.Sunset,
-      image: "/src/images/sunset-prayer-mosque.png",
+      image: { Sunset },
     },
     {
       key: "Isha",
       time: timings.Isha,
-      image: "/src/images/night-prayer-mosque.png",
+      image: { Isha },
     },
   ];
   //status
@@ -95,8 +99,8 @@ export default function MainContent() {
 
   const getLocation = async () => {
     const getLocationDetail = await axios.get(
-      `http://ip-api.com/json/?fields=61439`
-    );
+      `https://ip-api.com/json/?fields=61439`
+    ); // http only to run
     setLocationDetail(getLocationDetail.data);
     const co = countryData.find((e) => {
       return e.isoCode == getLocationDetail.data.countryCode;

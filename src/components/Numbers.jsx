@@ -31,7 +31,6 @@ const Numbers = () => {
       return () => clearInterval(timer1);
     }
   }, [scrollPos, count1, count2, count3]);
-  console.log(scrollPos);
   return (
     <div className="container">
       <div className="box">
