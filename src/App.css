@@ -67,3 +67,31 @@ html {
 .css-574lq2-MuiFormControl-root {
   margin: 8px 0px !important;
 }
+@media (max-width: 1300px) {
+  .css-1lqx20k-MuiStack-root {
+    flex-direction: column !important;
+  }
+  .css-1pi8xg4-MuiGrid2-root {
+    text-align: center;
+    display: flex;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .css-48anut-MuiStack-root {
+    flex-wrap: wrap;
+    justify-content: center !important;
+  }
+  .css-14zyp9z-MuiGrid2-root,
+  .css-bytlsb-MuiGrid2-root {
+    width: fit-content !important;
+  }
+  .css-19r6kue-MuiContainer-root {
+    padding-left: 0px !important;
+    padding-right: 20px !important;
+  }
+  img {
+    visibility: hidden;
+  }
+}

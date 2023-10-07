@@ -40,3 +40,17 @@
   margin: 0;
   font-size: 20px;
 }
+@media (max-width: 750px) {
+  .box p {
+    font-size: 15px;
+  }
+  .box h2 span {
+    font-size: 20px;
+  }
+  .box i {
+    font-size: 30px;
+  }
+  .box h2 {
+    font-size: 40px;
+  }
+}

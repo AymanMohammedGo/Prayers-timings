@@ -46,6 +46,7 @@ const SelectLocation = ({
 
       <Button
         style={{
+          width: "200px",
           behavior: "smooth",
           fontWeight: "900",
           fontSize: "1rem",
@@ -63,6 +64,7 @@ const SelectLocation = ({
       </Button>
       <Button
         style={{
+          width: "200px",
           fontWeight: "900",
           fontSize: "1rem",
           padding: "10px",
@@ -72,26 +74,13 @@ const SelectLocation = ({
         variant="contained"
         color="success"
         onClick={() => {
-          window.scrollTo({ top: 600, behavior: "smooth" });
+          window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth",
+          });
         }}
       >
         Contact Us
-      </Button>
-      <Button
-        style={{
-          fontWeight: "900",
-          fontSize: "1rem",
-          padding: "10px",
-          background: "rgb(69 98 149)",
-          margin: "20px 0px",
-        }}
-        variant="contained"
-        color="success"
-        onClick={() => {
-          window.scrollTo({ top: 600, behavior: "smooth" });
-        }}
-      >
-        Different Topics
       </Button>
 
       {city && (
